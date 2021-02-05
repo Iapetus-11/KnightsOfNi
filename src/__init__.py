@@ -6,9 +6,11 @@ import nimporter
 
 # KnightsOfNi imports
 import nim.chunkio as chunkio
+
 nimporter.build_nim_extensions()
 
-class ChunkIO():
+
+class ChunkIO:
     calc_offset = staticmethod(chunkio.calc_offset)
     find_chunk = staticmethod(chunkio.find_chunk)
 
