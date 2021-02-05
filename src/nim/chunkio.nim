@@ -13,7 +13,7 @@ proc find_chunk(location: uint32): array[0..1, uint32] {.exportpy.} =
 
   return [offset * 4096, size * 4096]
 
-proc fetch_chunk(world_path: string, chunk_x: int32, chunk_z: int32): seq[byte] {.exportpy.} =
+proc fetch_chunk(world_path: string, chunk_x: int32, chunk_z: int32): array[0..1, string] {.exportpy.} =
   let region_x: int32 = int32(chunk_x / 32)
   let region_y: int32 = int32(chunk_z / 32)
 
@@ -31,3 +31,4 @@ proc fetch_chunk(world_path: string, chunk_x: int32, chunk_z: int32): seq[byte] 
   let timestamp: int32 = stream.readInt32()
 
   stream.setPosition(int32(chunk_pos[0]) + 5)
+  return [string(stream.readStr(int(chunk_pos[1]))), $timestamp]
