@@ -1,7 +1,8 @@
 import nimporter
 
 # PyMine imports
-# from pymine.api.abc import AbstractChunkIO
+from pymine.api.abc import AbstractChunkIO
+from pymine.types.chunk import Chunk
 
 
 # KnightsOfNi imports
@@ -10,7 +11,7 @@ import nim.chunkio as chunkio
 nimporter.build_nim_extensions()
 
 
-class ChunkIO:
+class ChunkIO(AbstractChunkIO):
     calc_offset = staticmethod(chunkio.calc_offset)
     find_chunk = staticmethod(chunkio.find_chunk)
 
