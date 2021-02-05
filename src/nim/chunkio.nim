@@ -31,4 +31,4 @@ proc fetch_chunk(world_path: string, chunk_x: int32, chunk_z: int32): array[0..1
   let timestamp: int32 = stream.readInt32()
 
   stream.setPosition(int32(chunk_pos[0]) + 5)
-  return [string(stream.readStr(int(chunk_pos[1]))), $timestamp]
+  return [$stream.readStr(int(chunk_pos[1])), $timestamp]
