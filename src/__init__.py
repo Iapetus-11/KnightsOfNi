@@ -1,13 +1,22 @@
 import nimporter
 
-global server
-server = None
+# PyMine imports
+from pymine.api.abc import AbstractChunkIO
+
+# KnightsOfNi imports
+import nim.chunkio as chunkio
+nimporter.build_nim_extensions()
 
 
-async def setup(server, config: dict) -> None:
-    global server
-    server = server
+class ChunkIO(AbstractChunkIO):
+    calc_offset = staticmethod(chunkio.calc_offset)
+    find_chunk = staticmethod(chunkio.find_chunk)
+
+async def setup(server_, config_: dict) -> None:
+    global server, config
+    server = server_
+    config = config_
 
 
-async def teardown(server):
+async def teardown(server) -> None:
     pass
