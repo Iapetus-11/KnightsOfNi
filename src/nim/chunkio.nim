@@ -8,5 +8,3 @@ proc find_chunk(location: uint32): array[0..1, uint32] =
   var size: uint32 = bitops.bitand(location, 0xFF)
 
   return [offset * 4096, size * 4096]
-
-echo find_chunk(123)
