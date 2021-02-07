@@ -2,6 +2,7 @@ import nimporter
 import zlib
 
 # PyMine imports
+from pymine.logic.worldio import ChunkIO as DefaultChunkIO
 from pymine.api.abc import AbstractChunkIO
 from pymine.types.buffer import Buffer
 from pymine.types.chunk import Chunk
@@ -35,4 +36,4 @@ async def setup(server, config: dict) -> None:
 
 
 async def teardown(server) -> None:
-    pass
+    server.chunkio = DefaultChunkIO
