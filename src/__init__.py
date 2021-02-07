@@ -4,9 +4,10 @@ import nimporter
 from pymine.api.abc import AbstractChunkIO
 from pymine.types.chunk import Chunk
 
-
 # KnightsOfNi imports
 import nim.chunkio as chunkio
+
+global server, config
 
 
 class ChunkIO(AbstractChunkIO):
