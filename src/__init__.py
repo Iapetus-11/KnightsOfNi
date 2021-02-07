@@ -20,7 +20,7 @@ class ChunkIO(AbstractChunkIO):
 
 
 async def setup(server, config: dict) -> None:
-    if config.get('enabled', True):
+    if config.get("enabled", True):
         server.chunkio = ChunkIO
 
 
