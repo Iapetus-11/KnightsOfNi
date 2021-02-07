@@ -7,8 +7,6 @@ from pymine.types.chunk import Chunk
 # KnightsOfNi imports
 import nim.chunkio as chunkio
 
-global server, config
-
 
 class ChunkIO(AbstractChunkIO):
     calc_offset = staticmethod(chunkio.calc_offset)
@@ -21,10 +19,9 @@ class ChunkIO(AbstractChunkIO):
         pass
 
 
-async def setup(server_, config_: dict) -> None:
-    global server, config
-    server = server_
-    config = config_
+async def setup(server, config: dict) -> None:
+    if config.get('enabled', True):
+        server.chunkio = ChunkIO
 
 
 async def teardown(server) -> None:
