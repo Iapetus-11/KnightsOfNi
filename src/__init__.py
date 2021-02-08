@@ -10,7 +10,7 @@ from pymine.api import call_async
 import pymine.types.nbt as nbt
 
 # KnightsOfNi imports
-import nim.chunkio as chunkio
+import chunkio
 
 
 class ChunkIO(AbstractChunkIO):
