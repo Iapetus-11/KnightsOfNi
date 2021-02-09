@@ -21,9 +21,9 @@ class ChunkIO(AbstractChunkIO):
     def fetch_chunk(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
         chunk_data, timestamp = chunkio.fetchChunk(world_path, chunk_x, chunk_z)
 
-        chunk_data = nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk_data)))
+        chunk_nbt = nbt.TAG_Compound.unpack(Buffer(zlib.decompress(b"".join(chunk_data))))
 
-        return Chunk(chunk_data, timestamp)
+        return Chunk(chunk_nbt, timestamp)
 
     @classmethod
     async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
