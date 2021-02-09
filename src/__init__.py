@@ -14,12 +14,12 @@ import chunkio
 
 
 class ChunkIO(AbstractChunkIO):
-    calc_offset = staticmethod(chunkio.calc_offset)
-    find_chunk = staticmethod(chunkio.find_chunk)
+    calc_offset = staticmethod(chunkio.calcOffset)
+    find_chunk = staticmethod(chunkio.findChunk)
 
     @classmethod
     def fetch_chunk(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
-        chunk_data, timestamp = chunkio.fetch_chunk(world_path, chunk_x, chunk_z)
+        chunk_data, timestamp = chunkio.fetchChunk(world_path, chunk_x, chunk_z)
 
         chunk_data = nbt.TAG_Compound.unpack(Buffer(zlib.decompress(chunk_data)))
 
