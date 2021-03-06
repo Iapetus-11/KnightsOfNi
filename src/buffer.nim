@@ -1,7 +1,5 @@
 import strutils
 import streams
-import nimpy
-import math
 
 proc packVarintInto(s: Stream, num: int, maxBits: int = 32) {.discardable.} =
   var num = num
