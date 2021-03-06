@@ -1,4 +1,4 @@
-import strutils
+import strformat
 import streams
 
 proc packVarintInto(s: Stream, num: int, maxBits: int = 32) {.discardable.} =
@@ -8,7 +8,7 @@ proc packVarintInto(s: Stream, num: int, maxBits: int = 32) {.discardable.} =
   let numMax = (1 shl (maxBits - 1))
 
   if not (numMin <= num and num < numMax):
-    raise newException(ValueError, strutils.format("num doesn't fit in given range: {numMin} <= {num} < {numMax}"))
+    raise newException(ValueError, strformat.fmt("num doesn't fit in given range: {numMin} <= {num} < {numMax}"))
 
   if num < 0:
     num += 1 + 1 shl 32
