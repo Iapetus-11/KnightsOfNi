@@ -4,11 +4,6 @@ import bitops
 import nimpy
 import os
 
-type
-  ChunkData* = ref object of RootObj
-    data*: seq[byte]
-    timestamp*: int
-
 proc calcOffset(chunk_x: int32, chunk_z: int32): int32 {.exportpy.} =
   return 4 * (bitops.bitand(chunk_x, 31) + bitops.bitand(chunk_z, 31) * 32)
 
@@ -18,7 +13,7 @@ proc findChunk(location: uint32): array[0..1, uint32] {.exportpy.} =
 
   return [offset * 4096, size * 4096]
 
-proc fetchChunk(world_path: string, chunk_x: int32, chunk_z: int32): ChunkData {.exportpy.} =
+proc fetchChunk(world_path: string, chunk_x: int32, chunk_z: int32): array[0..1, string] {.exportpy.} =
   let region_x: int32 = int32(chunk_x / 32)
   let region_y: int32 = int32(chunk_z / 32)
 
@@ -42,4 +37,4 @@ proc fetchChunk(world_path: string, chunk_x: int32, chunk_z: int32): ChunkData {
   for c in stream.readStr(int(chunk_pos[1])):
     data.add(byte(c))
 
-  return ChunkData(data: data, timestamp: timestamp)
+  return [$data, $timestamp]
