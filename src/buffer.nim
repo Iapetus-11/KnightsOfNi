@@ -1,4 +1,30 @@
+import strutils
+import streams
 import nimpy
+
+proc packVarint(num: var int, maxBits: int = 32): string =
+  let numMin = (-1 shl (maxBits - 1))
+  let numMax = (1 shl (maxBits - 1))
+
+  if not (numMin <= num and num < numMax):
+    raise newException(ValueError, strutils.format("num doesn't fit in given range: {numMin} <= {num} < {numMax}"))
+
+  if num < 0:
+    num += 1 + 1 shl 32
+
+  var outString: StringStream = newStringStream()
+  var b: int
+
+  for i in countup(0, 10):
+    b = num and 0x7F
+    num = num shr 7
+
+    outString.write(uint8(b or (if num > 0: 0x80 else: 0)))
+
+    if num == 0:
+      break
+
+  return outString.readAll()
 
 proc packChunkSectionBlocks(blockStates: seq, bitsPerBlock: int): string =
   if isNil(blockStates):
