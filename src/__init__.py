@@ -6,11 +6,13 @@ from pymine.logic.worldio import ChunkIO as DefaultChunkIO
 from pymine.api.abc import AbstractChunkIO
 from pymine.types.buffer import Buffer
 from pymine.types.chunk import Chunk
-from pymine.api import call_async
 import pymine.types.nbt as nbt
+
+import pymine.types.buffer as buffer_module
 
 # KnightsOfNi imports
 import chunkio
+import buffer
 
 
 class ChunkIO(AbstractChunkIO):
@@ -35,6 +37,8 @@ class ChunkIO(AbstractChunkIO):
 async def setup(server, config: dict) -> None:
     if config.get("enabled", True):
         server.chunkio = ChunkIO
+        buffer_module.Buffer.pack_varint = buffer.packVarint
+        buffer_module.Buffer.pack_chunk_section_blocks = buffer.packChunkSectionBlocks
 
 
 async def teardown(server) -> None:
