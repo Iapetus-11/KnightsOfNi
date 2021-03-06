@@ -1,15 +1,14 @@
 import strformat
 import streams
-import bitops
 import nimpy
 import os
 
 proc calcOffset(chunk_x: int32, chunk_z: int32): int32 {.exportpy.} =
-  return 4 * (bitops.bitand(chunk_x, 31) + bitops.bitand(chunk_z, 31) * 32)
+  return 4 * ((chunk_x and 31) + (chunk_z and 31) * 32)
 
 proc findChunk(location: uint32): array[0..1, uint32] {.exportpy.} =
-  let offset: uint32 = bitops.bitand(bitops.rotateRightBits(location, 8), 0xFFFFFF)
-  let size: uint32 = bitops.bitand(location, 0xFF)
+  let offset: uint32 = (location and 8) and 0xFFFFFF
+  let size: uint32 = location and 0xFF
 
   return [offset * 4096, size * 4096]
 
