@@ -1,8 +1,11 @@
 import strutils
 import streams
 import nimpy
+import math
 
-proc packVarint(num: var int, maxBits: int = 32): string =
+proc packVarintInto(s: Stream, num: int, maxBits: int = 32) {.discardable.} =
+  var num = num
+
   let numMin = (-1 shl (maxBits - 1))
   let numMax = (1 shl (maxBits - 1))
 
@@ -12,25 +15,21 @@ proc packVarint(num: var int, maxBits: int = 32): string =
   if num < 0:
     num += 1 + 1 shl 32
 
-  var outString: StringStream = newStringStream()
   var b: int
 
   for i in countup(0, 10):
     b = num and 0x7F
     num = num shr 7
 
-    outString.write(uint8(b or (if num > 0: 0x80 else: 0)))
+    s.write(uint8(b or (if num > 0: 0x80 else: 0)))
 
     if num == 0:
       break
 
-  return outString.readAll()
-
-proc packChunkSectionBlocks(blockStates: seq, bitsPerBlock: int): string =
-  if isNil(blockStates):
-    return "\x00"
-
-  var data: array[0..(16 ** 3 * bitsPerBlock div 64), byte]
+proc packChunkSectionBlocks(blockStates: seq[seq[seq[int]]], bitsPerBlock: int): string =
+  var outString: StringStream = newStringStream()
+  let dataLen: int = int((16 * 16 * 16) * bitsPerBlock / 64)
+  var data: seq[int64] = newSeq[int64](dataLen)
   var individualValueMask: int = (1 shl bitsPerBlock) - 1
 
   for y in countup(0, 16):
@@ -47,3 +46,10 @@ proc packChunkSectionBlocks(blockStates: seq, bitsPerBlock: int): string =
 
         if startLong != endLong:
           data[endLong] = value shr (64 - startOffset)
+
+  packVarintInto(outString, len(data))
+
+  for long in data:
+    outString.write(long)
+
+  return outString.readAll()
