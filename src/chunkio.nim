@@ -32,9 +32,9 @@ proc fetchChunk(world_path: string, chunk_x: int32, chunk_z: int32): array[0..1,
 
   stream.setPosition(int32(chunk_pos[0]) + 5)
 
-  var data: seq[byte]
+  var data: string
 
   for c in stream.readStr(int(chunk_pos[1])):
-    data.add(byte(c))
+    data &= c
 
-  return [$data, $timestamp]
+  return [data, $timestamp]
