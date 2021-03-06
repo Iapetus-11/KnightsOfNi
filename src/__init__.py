@@ -8,11 +8,14 @@ from pymine.types.buffer import Buffer
 from pymine.types.chunk import Chunk
 import pymine.types.nbt as nbt
 
-import pymine.types.buffer as buffer_module
-
 # KnightsOfNi imports
-import chunkio
-import buffer
+try:
+    import chunkio
+    import buffer
+except ModuleNotFoundError:
+    NIM_IMPORT_SUCCESS = False
+else:
+    NIM_IMPORT_SUCCESS = True
 
 
 class ChunkIO(AbstractChunkIO):
@@ -36,9 +39,13 @@ class ChunkIO(AbstractChunkIO):
 
 async def setup(server, config: dict) -> None:
     if config.get("enabled", True):
+        if not NIM_IMPORT_SUCCESS:
+            server.console.warning("KnightsOfNi: Failed to load nim extensions, KnightsOfNi will be disabled.")
+            return
+
         server.chunkio = ChunkIO
-        buffer_module.Buffer.pack_varint = buffer.packVarint
-        buffer_module.Buffer.pack_chunk_section_blocks = buffer.packChunkSectionBlocks
+        Buffer.pack_varint = buffer.packVarint
+        Buffer.pack_chunk_section_blocks = buffer.packChunkSectionBlocks
 
 
 async def teardown(server) -> None:
