@@ -1,4 +1,4 @@
-import nimporter
+import asyncio
 import zlib
 
 # PyMine imports
@@ -27,7 +27,7 @@ class ChunkIO(AbstractChunkIO):
 
     @classmethod
     async def fetch_chunk_async(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
-        return await call_async(cls.fetch_chunk, world_path, chunk_x, chunk_z)
+        return await asyncio.get_event_loop().run_in_executor(server.thread_executor, cls.fetch_chunk, world_path, chunk_x, chunk_z)
 
 
 async def setup(server, config: dict) -> None:
