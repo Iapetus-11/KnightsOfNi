@@ -3,16 +3,16 @@ import streams
 import nimpy
 import os
 
-proc calcOffset(chunk_x: int32, chunk_z: int32): int32 {.exportpy.} =
+proc calcOffset*(chunk_x: int32, chunk_z: int32): int32 {.exportpy.} =
   return 4 * ((chunk_x and 31) + (chunk_z and 31) * 32)
 
-proc findChunk(location: uint32): array[0..1, uint32] {.exportpy.} =
+proc findChunk*(location: uint32): array[0..1, uint32] {.exportpy.} =
   let offset: uint32 = (location and 8) and 0xFFFFFF
   let size: uint32 = location and 0xFF
 
   return [offset * 4096, size * 4096]
 
-proc fetchChunk(world_path: string, chunk_x: int32, chunk_z: int32): array[0..1, string] {.exportpy.} =
+proc fetchChunk*(world_path: string, chunk_x: int32, chunk_z: int32): array[0..1, string] {.exportpy.} =
   let region_x: int32 = int32(chunk_x / 32)
   let region_y: int32 = int32(chunk_z / 32)
 
