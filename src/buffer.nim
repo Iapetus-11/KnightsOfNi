@@ -24,6 +24,11 @@ proc packVarintInto(s: Stream, num: int, maxBits: int = 32) {.discardable.} =
     if num == 0:
       break
 
+proc packVarint*(num: int, maxBits: int = 32): string =
+  var outString: StringStream = newStringStream()
+  packVarintInto(outString, num, maxBits)
+  return outString.readAll()
+
 proc packChunkSectionBlocks*(blockStates: seq[seq[seq[int]]], bitsPerBlock: int): string =
   var outString: StringStream = newStringStream()
   let dataLen: int = int((16 * 16 * 16) * bitsPerBlock / 64)
