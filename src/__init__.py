@@ -17,6 +17,7 @@ except ModuleNotFoundError:
 else:
     NIM_IMPORT_SUCCESS = True
 
+
 async def setup(server, config: dict) -> None:
     if config.get("enabled", True):
         if not NIM_IMPORT_SUCCESS:
@@ -31,7 +32,9 @@ async def setup(server, config: dict) -> None:
             def fetch_chunk(cls, world_path: str, chunk_x: int, chunk_z: int) -> Chunk:
                 chunk_data, timestamp = chunkio.fetchChunk(world_path, chunk_x, chunk_z)
 
-                chunk_nbt = nbt.TAG_Compound.unpack(Buffer(zlib.decompress(b"".join([ord(c).to_bytes(1, "big") for c in chunk_data]))))
+                chunk_nbt = nbt.TAG_Compound.unpack(
+                    Buffer(zlib.decompress(b"".join([ord(c).to_bytes(1, "big") for c in chunk_data])))
+                )
 
                 return Chunk(chunk_nbt, int(timestamp))
 
