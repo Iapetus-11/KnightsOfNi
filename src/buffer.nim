@@ -1,5 +1,6 @@
 import strformat
 import streams
+import nimpy
 
 proc packVarintInto(s: Stream, num: int, maxBits: int = 32) {.discardable.} =
   var num = num
@@ -24,12 +25,12 @@ proc packVarintInto(s: Stream, num: int, maxBits: int = 32) {.discardable.} =
     if num == 0:
       break
 
-proc packVarint*(num: int, maxBits: int = 32): string =
+proc packVarint*(num: int, maxBits: int = 32): string {.exportpy.} =
   var outString: StringStream = newStringStream()
   packVarintInto(outString, num, maxBits)
   return outString.readAll()
 
-proc packChunkSectionBlocks*(blockStates: seq[seq[seq[int]]], bitsPerBlock: int): string =
+proc packChunkSectionBlocks*(blockStates: seq[seq[seq[int]]], bitsPerBlock: int): string {.exportpy.} =
   var outString: StringStream = newStringStream()
   let dataLen: int = int((16 * 16 * 16) * bitsPerBlock / 64)
   var data: seq[int64] = newSeq[int64](dataLen)
