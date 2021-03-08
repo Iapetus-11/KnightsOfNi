@@ -34,10 +34,6 @@ proc packVarint*(num: int, maxBits: int = 32): string {.exportpy.} =
   return outString.readAll()
 
 proc packChunkSectionBlocks*(blockStates: seq[seq[seq[int]]], bitsPerBlock: int): string {.exportpy.} =
-  echo len(blockStates)
-  echo len(blockStates[0])
-  echo len(blockStates[0][0])
-
   var outString: StringStream = newStringStream()
   let dataLen: int = int((16 * 16 * 16) * bitsPerBlock / 64)
   var data: seq[int64] = newSeq[int64](dataLen)
