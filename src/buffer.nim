@@ -34,14 +34,18 @@ proc packVarint*(num: int, maxBits: int = 32): string {.exportpy.} =
   return outString.readAll()
 
 proc packChunkSectionBlocks*(blockStates: seq[seq[seq[int]]], bitsPerBlock: int): string {.exportpy.} =
+  echo len(blockStates)
+  echo len(blockStates[0])
+  echo len(blockStates[0][0])
+
   var outString: StringStream = newStringStream()
   let dataLen: int = int((16 * 16 * 16) * bitsPerBlock / 64)
   var data: seq[int64] = newSeq[int64](dataLen)
   var individualValueMask: int = (1 shl bitsPerBlock) - 1
 
-  for y in countup(0, 16):
-    for z in countup(0, 16):
-      for x in countup(0, 16):
+  for y in countup(0, 15):
+    for z in countup(0, 15):
+      for x in countup(0, 15):
         let blockNum: int = (((y * 16) + z) * 16) + x
         let startLong: int = (blockNum * bitsPerBlock) div 64
         let startOffset: int = (blockNum * bitsPerBlock) mod 64
