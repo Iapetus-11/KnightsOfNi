@@ -27,7 +27,10 @@ proc packVarintInto(s: Stream, num: int, maxBits: int = 32) {.discardable.} =
 
 proc packVarint*(num: int, maxBits: int = 32): string {.exportpy.} =
   var outString: StringStream = newStringStream()
+
   packVarintInto(outString, num, maxBits)
+
+  outString.setPosition(0)
   return outString.readAll()
 
 proc packChunkSectionBlocks*(blockStates: seq[seq[seq[int]]], bitsPerBlock: int): string {.exportpy.} =
@@ -56,4 +59,5 @@ proc packChunkSectionBlocks*(blockStates: seq[seq[seq[int]]], bitsPerBlock: int)
   for long in data:
     outString.write(long)
 
+  outString.setPosition(0)
   return outString.readAll()
